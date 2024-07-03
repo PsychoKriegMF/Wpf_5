@@ -9,15 +9,19 @@
         Icon="Resources\icon.png"
         ResizeMode="NoResize" Height="450" Width="400">
     <Window.Resources>
-        <Style TargetType="Button">                                             
+        <!--<Style TargetType="Button">                                             
             <Setter Property="Background" Value="#5EBEC4"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="FontFamily" Value="Cascadia Mono"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="MaxWidth" Value="150"/>
             <Setter Property="Padding" Value="12"/>
-        </Style>
+        </Style>-->
         <Style TargetType="DatePicker">
+            <Setter Property="SelectedDateFormat" Value="Long"/>
+            <Setter Property ="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#5ebec4"/>
+            <Setter Property="Background" Value="White"/>
             <Setter Property="CalendarStyle">
                 <Setter.Value>
                     <Style TargetType="Calendar">
@@ -37,7 +41,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock FontSize="26" TextAlignment="Center" Margin="12">Новое Дело</TextBlock>
+        <TextBlock Style="{StaticResource HeaderStyle}" TextAlignment="Center" Margin="12">Новое Дело</TextBlock>
         <GroupBox Grid.Row="1" Background="#FDF5DF" Padding="8" Name="groupBoxToDo">
             <StackPanel>
                 <TextBlock>Название:</TextBlock>
@@ -51,7 +55,7 @@
             </StackPanel>
         </GroupBox>
 
-        <Button Click="AddJob" Margin="12" Grid.Row="2"
+        <Button MaxWidth="150" Click="AddJob" Margin="12" Grid.Row="2"
                 Name="buttonAdd" 
                 ToolTip="при добавлении дело появится в списке слева, и его придется выполнить">
                 Добавить дело</Button>        
