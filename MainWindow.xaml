@@ -9,6 +9,34 @@
         Background="#FFFDFAF1"             
         Title="Список дел" Height="450" Width="400">
     <Window.Resources>
+        <local:OneConverter x:Key="OneConverter"/>
+        <local:TwoConverter x:Key="TwoConverter"/>
+        <local:ThreeConverter x:Key="ThreeConverter"/>
+
+        <Style x:Key="stroke" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=checkbox, Path=isChecked}" Value="True">
+                    <Setter  Property="TextDecorations" Value="Strikethrough"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="date" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF71C52F"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Date, Converter=OneConverter}" Value="True">
+                    <Setter Property="Control.Foreground" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Date, Converter=TwoConverter}" Value="True">
+                    <Setter Property="Control.Foreground" Value="#FFEA6A20"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Date, Converter=ThreeConverter}" Value="True">
+                    <Setter Property="Control.Foreground" Value="#DAA520"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>   
+            
         <Style x:Key="DataGridStyle" TargetType="DataGrid">
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
@@ -46,7 +74,68 @@
             <Image Source="Resources\add.png" Width="20" Height="15"/>
         </Button>
 
-        <DataGrid Style="{StaticResource DataGridStyle}" IsReadOnly="True" Grid.ColumnSpan="2" Margin="12 0" 
+        <ListBox Grid.ColumnSpan="2" Margin="12 0" x:Name="listToDo" Background="#FDF5DF" Grid.Row="1"
+                 HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Grid.Column="0" x:Name="checkbox" Unchecked="CheckBox_Unchecked"
+                                  Checked="CheckBox_Checked" IsChecked="{Binding Done}"/>
+                        <TextBlock Style="{StaticResource stroke}" Grid.Column="1" Text="{Binding Title}"
+                                   HorizontalAlignment="Left" Margin="8 0 0 0"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Date, StringFormat=dd.MM.yyyy}" 
+                                   Margin="0 0 8 0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#FF71C52F"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Date, 
+                                            Converter={StaticResource OneConverter}}" Value="true">
+                                                    <Setter Property="Control.Foreground" Value="Red"/>                                             
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Date, 
+                                            Converter={StaticResource TwoConverter}}" Value="true">
+                                                    <Setter Property="Control.Foreground" Value="#FFEA6A20"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Date, 
+                                            Converter={StaticResource ThreeConverter}}" Value="true">
+                                                    <Setter Property="Control.Foreground" Value="#DAA520"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Button Grid.Column="3" Click="DeleteJob" Background="#5EBEC4" BorderThickness="0">
+                            <Image Source="Resources\delete.png" Width="10" Height="15"/>
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        
+
+        <!--<DataGrid Style="{StaticResource DataGridStyle}" IsReadOnly="True" Grid.ColumnSpan="2" Margin="12 0" 
                   x:Name="ListToDo" 
                   Background="#fdf5df" Grid.Row="1" AutoGenerateColumns="False" 
                   GridLinesVisibility="Horizontal">
@@ -80,7 +169,7 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
 
-        </DataGrid>
+        </DataGrid>-->
         <ProgressBar Foreground="#5ebec4" Grid.Row="2" Grid.ColumnSpan="2" Margin="12" Minimum="0"
                      Maximum="{Binding Path=todoList.Count, Mode=OneWay}" 
                      Value="{Binding CountDone, Mode=OneWay}"/>

@@ -67,6 +67,7 @@ string OutputFileDir =System.IO.Path.Combain(Directory.GetCurrentDirectory(), "F
 
                    Команды в WPF
 
+    
 
 
 
